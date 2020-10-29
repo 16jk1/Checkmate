@@ -1,0 +1,75 @@
+type User {
+  id: ID! @id
+  avatar: String @default(
+    value:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAP1BMVEXx8PCqqqmnp6bPz8708/Otrazu7e3b2trr6uqkpKPV1NTi4eG1tLSxsLDl5OS9vLzCwsHIx8e+vr3MzMvZ19gaUtbVAAAFMElEQVR4nO2d27qbIBBGRUfxfEjy/s9aiLutuzZR4TcM7lmXucr6gBkYEJJEEARBEARBEARBEARBEARBEARBEOKD/hL6r+AxUmWj6zqz1LVuyktpGhl9H9ouVyq1KJV37XDXF5GkpKyH2esb9qehLpPYJSnRU/ev3MKym3TUjqZ3DvlLv1kyH3S8nbVo2uq939Oxapsi9F91gvpp0+43Ux9hM5J+Pf7W7djp2BSpHPf7PR3HMipH6ttjgkaxjamnUnNY0Co20ShSrY4LGkVVR6JI2kFvJo54Y4Kos2EUIZWa3FnQTMkjGIvlgTS4Ju3K0AKbHMyDK8UxtMAWdz9Bo3gPrfAWv0E4w3sokkOmXzViy9iQMn9Bo5jxVezdM+GSrg8t8hJIE9pGDC3yit4/zMzkTBuRvDPFb9I7z5FIqCY0jcjSkB6oJjSN+OCoSDeg4Y2jIShVzHBMGGZhj4Tjcn/CdVLTTafQOmvKASio1MBvndhDBZViNxBJIzup6absKjaYZcXCkN0CA5kNn4bsMiK1UEGl2K2DCZnvLR07Q7CgUuwMscPQDER2hhXYsBLDT/MDDK8/Dq9vCBZkmC1wZagZdsWoHzBrwy6AzRKYneH11xbQMo0t1LAzvP4K+PJVjKQHG7KrROG21mYYbrCV2ITY8quXFtB0kd4YHoy+fFUfmy74JQubLpChJueXLH7A/mFSIINpyzDQJOR5KnFJOjLspAnVQEOOW8Am5+PKbRW/fG+5/Hka4EDkOQyRCyiGS6eZEpUR2R5nL0DdNB05ZkML7NAQz1xhuf4Z4WSAnPMeQmu8BjOtYTqhmcHszzAWhCR9run+iwbQhE1oibf4p0S+yXAGkBI5xxmLd9mUYaH0O74Jg3Wq+MJvlZiH/vvb+NVNOdZJV3iNRPaj8IlPOK1D//ldeBROWZZJ11DjOhJT1p8ALyDHRVTK7oTJSxy/6M55z0i/kTkZsv049j+UDv00Zfgh0GuoOV7hr2IJMzPHZzZRzGaWHD24wPJownsOVhY5VxBfQMcKGnENwhk6kjJiG4Rf7D5hw/H0zD72nhtmXOTe4PKGu9fCcax7/0OzN2F0EU25l9Bjp6BSLK/B2MHlY+mBWU2EM5rk2OQ7umn3k2K3nyW6ebcRPLQITof4FO+HmlAp3pcJrnHYZYtgS2ZJ5lDFiKkQVey/q3zJFMtYJOe9mTaKO72pzJxugrakKovAUXudi0oHHVrgPdSPG689bCrmI9+72aloxh2vPWw6VmNTcJSkQo/OA/AfRzVqdo5E2dZrJIcc8yHj9HKJ7Z6g5ltIKjadlfr6tnoJCOKY3urwUYeonzp4+/1xVN3Uh+ytVPR1B4iebyWrru4D9VYbPIHB5Y1kHiS0UnJvP+I3O7b3zz58ZYPnKcHljWT6wdBKxePTfl+Oj484Eun2tOC54aja818wM+3n9UKHt2R3djtq8DU0Do63E9dXlHwmPWwo5uNZcbWoGfhZ0rw+o6JD5RjabMEJr7RRD/lqC0U6oOfkjg+NnQf8CbP9m52f4wH0w97qgQJ4O4jHU3HnAlMsObagJUed4QBe6YEF9YQZ9lkHLJDvM8CXeGFBnDVCXsqCB/GpG/zqVSyAW1AczqR/ksr7wBj61k40/reAQu+3OgPvj8Ggd5Sdge+BMZ4z0iW+s1PwK05n4Jkv0Jfn4vE99CeG4RFDMRTD8IihGP4AQ66FxL/4lhQpUylnAN9mks44gygKE2/8BQVBEARBEARBEARBEARBEARBEARhJ78AIwhTb1cHN38AAAAASUVORK5CYII="
+    )
+  username: String! @unique
+  email: String! @unique
+  firstName: String @default(value: "")
+  lastName: String
+  bio: String
+  followers: [User!]! @relation(name: "FollowRelation")
+  following: [User!]! @relation(name: "FollowRelation")
+  posts: [Post!]! @relation(name: "PostsOfUser", onDelete: CASCADE)
+  likes: [Like!]! @relation(name: "LikesOfUser", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentsOfUser", onDelete: CASCADE)
+  rooms: [Room!]!
+  loginSecret: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Post {
+  id: ID! @id
+  location: String
+  caption: String!
+  user: User @relation(name: "PostsOfUser")
+  files: [File!]! @relation(name: "FilesOfPost", onDelete: CASCADE)
+  likes: [Like!]! @relation(name: "LikeOfPost", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentOfPost", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Like {
+  id: ID! @id
+  user: User @relation(name: "LikesOfUser")
+  post: Post @relation(name: "LikeOfPost")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Comment {
+  id: ID! @id
+  text: String!
+  user: User @relation(name: "CommentsOfUser")
+  post: Post @relation(name: "CommentOfPost")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type File{
+  id: ID! @id
+  url: String! 
+  post: Post @relation(name: "FilesOfPost")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Room {
+  id: ID! @id
+  participants: [User!]!
+  messages: [Message!]!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Message{
+  id: ID! @id
+  text: String!
+  from: User! @relation(name: "From")
+  to: User! @relation(name: "To")
+  room: Room!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt 
+}

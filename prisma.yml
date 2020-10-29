@@ -1,0 +1,7 @@
+#endpoint: https://us1.prisma.sh/joonsoo-kim-c02290/instagram/dev
+endpoint: https://us1.prisma.sh/joonsoo-kim-c02290/instagram/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: javascript-client
+    output: ./generated/prisma-client/
